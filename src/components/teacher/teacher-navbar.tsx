@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { LogOutIcon, HelpCircleIcon, UserIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -26,7 +26,22 @@ interface TeacherData {
 
 export default function TeacherNavbar() {
     const router = useRouter();
+    const queryClient = useQueryClient();
     const [isOpen, setIsOpen] = useState(false);
+    const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+    // Periksa autentikasi saat komponen dimuat
+    useEffect(() => {
+        const checkAuth = async () => {
+            try {
+                await api.get("/guru/sidebar-data", { withCredentials: true });
+            } catch (error) {
+                queryClient.clear();
+                router.push("/login");
+            }
+        };
+        checkAuth();
+    }, [router, queryClient]);
 
     // Fetch teacher data for navbar
     const {
@@ -36,7 +51,7 @@ export default function TeacherNavbar() {
     } = useQuery<TeacherData>({
         queryKey: ["teacherNavbarData"],
         queryFn: async () => {
-            const response = await api.get("/guru/sidebar-data");
+            const response = await api.get("/guru/sidebar-data", { withCredentials: true });
             const data = response.data;
             return {
                 full_name: data.nama_lengkap,
@@ -52,13 +67,23 @@ export default function TeacherNavbar() {
     });
 
     const handleLogout = async () => {
+        setIsLoggingOut(true);
         try {
-            await api.post("/auth/logout");
-            router.push("/");
-            setIsOpen(false);
+            await api.post("/auth/logout", {}, { withCredentials: true });
+            queryClient.clear();
+            if ("caches" in window) {
+                caches.keys().then((cacheNames) => {
+                    cacheNames.forEach((cacheName) => {
+                        caches.delete(cacheName);
+                    });
+                });
+            }
+            window.location.href = "/login";
         } catch (error) {
             console.error("Gagal logout:", error);
-            router.push("/");
+            window.location.href = "/login";
+        } finally {
+            setIsLoggingOut(false);
             setIsOpen(false);
         }
     };
@@ -70,7 +95,7 @@ export default function TeacherNavbar() {
             .join("")
             .toUpperCase();
 
-    if (isLoading || !teacher) {
+    if (isLoading) {
         return (
             <nav className="w-full h-16 bg-white flex items-center sticky top-0 z-20 shadow-sm">
                 <div className="w-full px-4 sm:px-6 lg:px-8 flex items-center justify-between">
@@ -84,8 +109,8 @@ export default function TeacherNavbar() {
         );
     }
 
-    if (error || teacher.role !== "teacher") {
-        router.push("/");
+    if (error || (teacher && teacher.role !== "teacher")) {
+        router.push("/login");
         return null;
     }
 
@@ -155,11 +180,12 @@ export default function TeacherNavbar() {
                                 <DropdownMenuSeparator className="bg-gray-200" />
 
                                 <DropdownMenuItem
+                                    disabled={isLoggingOut}
                                     className={cn("flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer transition-colors", "hover:bg-red-50 hover:text-red-700 focus:bg-red-50 focus:text-red-700")}
                                     onClick={handleLogout}
                                 >
                                     <LogOutIcon className="h-4 w-4 text-red-600" />
-                                    <span>Keluar</span>
+                                    <span>{isLoggingOut ? "Logging out..." : "Keluar"}</span>
                                 </DropdownMenuItem>
                             </DropdownMenuGroup>
                         </DropdownMenuContent>
