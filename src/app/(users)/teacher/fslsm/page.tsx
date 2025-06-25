@@ -43,7 +43,7 @@ function FSLSMArticle() {
                         Felder-Silverman Learning Style Model (FSLSM) adalah alat untuk memahami cara siswa belajar. Setiap siswa memiliki preferensi gaya belajar yang bisa <strong>kuat</strong>, <strong>sedang</strong>, atau{" "}
                         <strong>lemah</strong> dalam empat dimensi: Proses, Persepsi, Input, dan Pemahaman.
                     </p>
-                    <div className="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500">
+                    <div className="bg-blue-50 p-4 rounded-lg border-blue-500">
                         <h3 className="font-bold text-blue-700 mb-2">Mengapa Penting?</h3>
                         <p className="text-sm">Menyesuaikan pengajaran dengan gaya belajar siswa dapat meningkatkan keterlibatan dan hasil belajar. FSLSM membantu guru merancang aktivitas yang cocok untuk setiap siswa.</p>
                     </div>
