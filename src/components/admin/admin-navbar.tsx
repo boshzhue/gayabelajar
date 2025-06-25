@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -22,39 +23,45 @@ export default function AdminNavbar({ children }: { children?: React.ReactNode }
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [admin, setAdmin] = useState<AdminData | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [isLoggingOut, setIsLoggingOut] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const router = useRouter();
 
     useEffect(() => {
-        const fetchAdminData = async () => {
+        const checkAuth = async () => {
             try {
-                const response = await api.get("/admin/navbar");
+                const response = await api.get("/admin/navbar", { withCredentials: true });
                 setAdmin(response.data);
                 setError(null);
             } catch (err: unknown) {
-                if (err instanceof Error) {
-                    console.error("Error fetching admin data:", err.message);
-                } else {
-                    console.error("Unknown error fetching admin data:", err);
-                }
+                console.error("Error fetching admin data:", err);
                 setError("Gagal memuat data admin");
+                router.push("/login");
             } finally {
                 setIsLoading(false);
             }
         };
-
-        fetchAdminData();
-    }, []);
+        checkAuth();
+    }, [router]);
 
     const handleSignOut = async () => {
+        setIsLoggingOut(true);
         try {
-            await api.post("/auth/logout");
+            await api.post("/auth/logout", {}, { withCredentials: true });
+            setAdmin(null);
             toast.success("Logout berhasil!", {
                 duration: 2000,
                 position: "top-center",
             });
+            if ("caches" in window) {
+                caches.keys().then((cacheNames) => {
+                    cacheNames.forEach((cacheName) => {
+                        caches.delete(cacheName);
+                    });
+                });
+            }
             setTimeout(() => {
-                router.push("/");
+                window.location.href = "/login";
             }, 2000);
         } catch (error) {
             console.error("Error signing out:", error);
@@ -63,8 +70,10 @@ export default function AdminNavbar({ children }: { children?: React.ReactNode }
                 position: "top-center",
             });
             setTimeout(() => {
-                router.push("/");
+                window.location.href = "/login";
             }, 2000);
+        } finally {
+            setIsLoggingOut(false);
         }
     };
 
@@ -96,7 +105,8 @@ export default function AdminNavbar({ children }: { children?: React.ReactNode }
     }
 
     if (error || !admin) {
-        return <div className="p-4 text-red-600 bg-red-50">{error || "Data admin tidak tersedia"}</div>;
+        router.push("/login");
+        return null;
     }
 
     return (
@@ -143,14 +153,18 @@ export default function AdminNavbar({ children }: { children?: React.ReactNode }
 
                             <DropdownMenuGroup className="py-1">
                                 <DropdownMenuItem
-                                    className={cn("flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer", "hover:bg-naturalSoft-accent hover:text-primary-800 focus:bg-naturalSoft-accent focus:text-primary-800 transition-colors")}
+                                    disabled={isLoggingOut}
+                                    className={cn(
+                                        "flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer",
+                                        "hover:bg-naturalSoft-accent hover:text-primary-800 focus:bg-naturalSoft-accent focus:text-primary-800 transition-colors"
+                                    )}
                                     onClick={() => {
                                         handleSignOut();
                                         setIsDropdownOpen(false);
                                     }}
                                 >
                                     <LogOutIcon className="h-4 w-4 text-red-600" />
-                                    <span>Sign Out</span>
+                                    <span>{isLoggingOut ? "Logging out..." : "Sign Out"}</span>
                                 </DropdownMenuItem>
                             </DropdownMenuGroup>
                         </DropdownMenuContent>
