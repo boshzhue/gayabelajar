@@ -213,23 +213,25 @@ export default function HistoryPage() {
                     </div>
                 ) : (
                     <>
-                        <Card className="bg-primary shadow-lg rounded-lg border-none">
-                            <div className="p-6">
-                                <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-                                    <div className="space-y-3">
-                                        <h1 className="text-3xl font-bold text-white flex items-center">
-                                            <BarChart2Icon className="mr-3 h-8 w-8" />
-                                            Lacak Perjalanan Gaya Belajarmu!
-                                        </h1>
-                                        <p className="text-gray-200 text-lg max-w-2xl">Tinjau riwayat tes gaya belajar Anda untuk menemukan pola yang membawa Anda menuju kesuksesan!</p>
+                        {/* Header Section */}
+                        <Card className="bg-primary text-white shadow-md border-none">
+                            <CardContent className="p-6">
+                                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                                    <div className="space-y-2">
+                                        <div className="flex items-center gap-3">
+                                            <BarChart2Icon className="h-8 w-8" />
+                                            <h1 className="text-3xl font-bold">Riwayat Tes</h1>
+                                        </div>
+                                        <p className="text-gray-200 text-sm max-w-xl">Tinjau riwayat tes gaya belajar Anda untuk memahami pola dan mengoptimalkan strategi belajar.</p>
                                     </div>
                                 </div>
-                            </div>
+                            </CardContent>
                         </Card>
 
-                        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-                            <StatCard icon={<BookOpenIcon className="h-7 w-7 text-primary" />} label="Total Tes" value={<span className="text-primary">{tests.length.toString()}</span>} />
-                            <StatCard icon={<CalendarIcon className="h-7 w-7 text-primary" />} label="Tes Terakhir" value={<span className="text-primary">{tests.length > 0 ? formatDate(tests[0].completed_at) : "-"}</span>} />
+                        {/* Stat Cards */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <StatCard icon={<BookOpenIcon className="h-6 w-6 text-primary" />} label="Total Tes" value={<span className="text-primary">{tests.length}</span>} />
+                            <StatCard icon={<CalendarIcon className="h-6 w-6 text-primary" />} label="Tes Terakhir" value={<span className="text-primary">{tests.length > 0 ? formatDate(tests[0].completed_at) : "-"}</span>} />
                         </div>
 
                         <Card className="bg-white shadow-lg rounded-lg border border-gray-200">
