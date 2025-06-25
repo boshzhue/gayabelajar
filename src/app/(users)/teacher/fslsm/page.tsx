@@ -34,7 +34,7 @@ function FSLSMArticle() {
                 </header>
 
                 {/* Pengantar */}
-                <section className="mb-12 bg-white p-6 rounded-xl shadow-md">
+                <section className="mb-6 bg-white p-6 rounded-xl shadow-md">
                     <h2 className="text-xl font-bold text-blue-700 mb-4 flex items-center gap-2">
                         <BookOpen className="text-blue-600" size={24} />
                         Apa Itu FSLSM?
@@ -50,7 +50,7 @@ function FSLSMArticle() {
                 </section>
 
                 {/* Preferensi Kuat, Sedang, Lemah */}
-                <section className="mb-12 bg-white p-6 rounded-xl shadow-md">
+                <section className="mb-6 bg-white p-6 rounded-xl shadow-md">
                     <h2 className="text-xl font-bold text-blue-700 mb-6 flex items-center gap-2">
                         <ClipboardCheck className="text-blue-600" size={24} />
                         Memahami Preferensi Gaya Belajar
@@ -84,7 +84,7 @@ function FSLSMArticle() {
                 </section>
 
                 {/* Empat Dimensi */}
-                <section className="mb-12 bg-white p-6 rounded-xl shadow-md">
+                <section className="mb-6 bg-white p-6 rounded-xl shadow-md">
                     <h2 className="text-xl font-bold text-blue-700 mb-6 flex items-center gap-2">
                         <Users className="text-blue-600" size={24} />
                         Empat Dimensi Gaya Belajar
