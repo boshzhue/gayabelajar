@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -30,24 +30,10 @@ export default function TeacherNavbar() {
     const [isOpen, setIsOpen] = useState(false);
     const [isLoggingOut, setIsLoggingOut] = useState(false);
 
-    // Periksa autentikasi saat komponen dimuat
-    useEffect(() => {
-        const checkAuth = async () => {
-            try {
-                await api.get("/guru/sidebar-data", { withCredentials: true });
-            } catch (error) {
-                queryClient.clear();
-                router.push("/login");
-            }
-        };
-        checkAuth();
-    }, [router, queryClient]);
-
     // Fetch teacher data for navbar
     const {
         data: teacher,
         isLoading,
-        error,
     } = useQuery<TeacherData>({
         queryKey: ["teacherNavbarData"],
         queryFn: async () => {
@@ -71,16 +57,6 @@ export default function TeacherNavbar() {
         try {
             await api.post("/auth/logout", {}, { withCredentials: true });
             queryClient.clear();
-            if ("caches" in window) {
-                caches.keys().then((cacheNames) => {
-                    cacheNames.forEach((cacheName) => {
-                        caches.delete(cacheName);
-                    });
-                });
-            }
-            window.location.href = "/login";
-        } catch (error) {
-            console.error("Gagal logout:", error);
             window.location.href = "/login";
         } finally {
             setIsLoggingOut(false);
@@ -95,7 +71,7 @@ export default function TeacherNavbar() {
             .join("")
             .toUpperCase();
 
-    if (isLoading) {
+    if (isLoading || !teacher) {
         return (
             <nav className="w-full h-16 bg-white flex items-center sticky top-0 z-20 shadow-sm">
                 <div className="w-full px-4 sm:px-6 lg:px-8 flex items-center justify-between">
@@ -109,8 +85,8 @@ export default function TeacherNavbar() {
         );
     }
 
-    if (error || (teacher && teacher.role !== "teacher")) {
-        router.push("/login");
+    if (teacher.role !== "teacher") {
+        router.push("/");
         return null;
     }
 
