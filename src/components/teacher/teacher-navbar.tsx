@@ -28,16 +28,16 @@ export default function TeacherNavbar() {
     const router = useRouter();
     const queryClient = useQueryClient();
     const [isOpen, setIsOpen] = useState(false);
-    const [isLoggingOut, setIsLoggingOut] = useState(false);
 
     // Fetch teacher data for navbar
     const {
         data: teacher,
         isLoading,
+        error,
     } = useQuery<TeacherData>({
         queryKey: ["teacherNavbarData"],
         queryFn: async () => {
-            const response = await api.get("/guru/sidebar-data", { withCredentials: true });
+            const response = await api.get("/guru/sidebar-data");
             const data = response.data;
             return {
                 full_name: data.nama_lengkap,
@@ -53,15 +53,10 @@ export default function TeacherNavbar() {
     });
 
     const handleLogout = async () => {
-        setIsLoggingOut(true);
-        try {
-            await api.post("/auth/logout", {}, { withCredentials: true });
-            queryClient.clear();
-            window.location.href = "/login";
-        } finally {
-            setIsLoggingOut(false);
-            setIsOpen(false);
-        }
+        await api.post("/auth/logout", {}, { withCredentials: true });
+        queryClient.clear();
+        window.location.href = "/login";
+        setIsOpen(false);
     };
 
     const getInitials = (name: string) =>
@@ -85,7 +80,7 @@ export default function TeacherNavbar() {
         );
     }
 
-    if (teacher.role !== "teacher") {
+    if (error || teacher.role !== "teacher") {
         router.push("/");
         return null;
     }
@@ -156,12 +151,11 @@ export default function TeacherNavbar() {
                                 <DropdownMenuSeparator className="bg-gray-200" />
 
                                 <DropdownMenuItem
-                                    disabled={isLoggingOut}
                                     className={cn("flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer transition-colors", "hover:bg-red-50 hover:text-red-700 focus:bg-red-50 focus:text-red-700")}
                                     onClick={handleLogout}
                                 >
                                     <LogOutIcon className="h-4 w-4 text-red-600" />
-                                    <span>{isLoggingOut ? "Logging out..." : "Keluar"}</span>
+                                    <span>Keluar</span>
                                 </DropdownMenuItem>
                             </DropdownMenuGroup>
                         </DropdownMenuContent>
