@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
@@ -24,23 +23,8 @@ interface UserData {
 }
 
 export default function StudentNavbar() {
-    const router = useRouter();
     const queryClient = useQueryClient();
     const [isOpen, setIsOpen] = useState(false);
-    const [isLoggingOut, setIsLoggingOut] = useState(false);
-
-    // Periksa autentikasi saat komponen dimuat
-    useEffect(() => {
-        const checkAuth = async () => {
-            try {
-                await api.get("/siswa", { withCredentials: true });
-            } catch (error) {
-                queryClient.clear();
-                router.push("/login");
-            }
-        };
-        checkAuth();
-    }, [router, queryClient]);
 
     // Fetch data pengguna untuk navbar
     const {
@@ -50,32 +34,17 @@ export default function StudentNavbar() {
     } = useQuery<UserData>({
         queryKey: ["navbarData"],
         queryFn: async () => {
-            const response = await api.get("/siswa", { withCredentials: true });
+            const response = await api.get("/siswa/navbar-data");
             return response.data;
         },
         retry: 1,
     });
 
     const handleLogout = async () => {
-        setIsLoggingOut(true);
-        try {
-            await api.post("/auth/logout", {}, { withCredentials: true });
-            queryClient.clear();
-            if ("caches" in window) {
-                caches.keys().then((cacheNames) => {
-                    cacheNames.forEach((cacheName) => {
-                        caches.delete(cacheName);
-                    });
-                });
-            }
-            window.location.href = "/login";
-        } catch (error) {
-            console.error("Gagal logout:", error);
-            window.location.href = "/login";
-        } finally {
-            setIsLoggingOut(false);
-            setIsOpen(false);
-        }
+        await api.post("/auth/logout", {}, { withCredentials: true });
+        queryClient.clear();
+        window.location.href = "/login";
+        setIsOpen(false);
     };
 
     const getInitials = (name: string) =>
@@ -100,7 +69,6 @@ export default function StudentNavbar() {
     }
 
     if (error || !user) {
-        router.push("/login");
         return null;
     }
 
@@ -170,12 +138,11 @@ export default function StudentNavbar() {
                                 <DropdownMenuSeparator className="bg-gray-200" />
 
                                 <DropdownMenuItem
-                                    disabled={isLoggingOut}
-                                    className={cn("flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer transition-colors", "hover:bg-red-50 hover:text-red-7007 focus:bg-red-50 focus:text-red-700")}
+                                    className={cn("flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer transition-colors", "hover:bg-red-50 hover:text-red-700 focus:bg-red-50 focus:text-red-700")}
                                     onClick={handleLogout}
                                 >
                                     <LogOutIcon className="h-4 w-4 text-red-600" />
-                                    <span>{isLoggingOut ? "Logging out..." : "Keluar"}</span>
+                                    <span>Keluar</span>
                                 </DropdownMenuItem>
                             </DropdownMenuGroup>
                         </DropdownMenuContent>
