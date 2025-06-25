@@ -64,7 +64,7 @@ export default function StartNewTestPage() {
                             <div className="space-y-3">
                                 <h2 className="text-3xl font-bold flex items-center" style={{ color: PRIMARY_COLOR }}>
                                     <ClipboardCheck className="mr-3 h-8 w-8" />
-                                    Mulai Tes Gaya Belajar
+                                    Mulai Tes
                                 </h2>
                                 <p className="text-gray-600 text-lg max-w-2xl">Identifikasi gaya belajar Anda untuk pengalaman belajar yang lebih efektif.</p>
                             </div>
