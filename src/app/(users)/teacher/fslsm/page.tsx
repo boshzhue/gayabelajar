@@ -23,7 +23,7 @@ function FSLSMArticle() {
                 <meta name="description" content="Panduan praktis FSLSM untuk membantu guru memahami dan mengakomodasi gaya belajar siswa dengan mudah." />
             </Head>
 
-            <div className="max-w-7xl mx-auto px-4 py-2">
+            <div className="max-w-7xl mx-auto py-2">
                 {/* Header */}
                 <header className="mb-10 text-center bg-secondary text-white p-8 rounded-xl shadow-lg">
                     <h1 className="text-2xl md:text-3xl font-bold mb-3 flex items-center justify-center gap-2">
