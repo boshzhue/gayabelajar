@@ -1,6 +1,5 @@
 "use client";
 import { use } from "react";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowUpRight, BookOpen, BrainCog, CalendarIcon, CheckCircle2, Gauge, ChevronLeft, Loader2 } from "lucide-react";
@@ -55,25 +54,27 @@ interface TestDetail {
     recommendations: string;
 }
 
-// Level Intensitas
 const INTENSITY_LEVELS = {
     Kuat: {
-        description: "Sangat dominan dalam gaya belajar ini",
-        color: "bg-green-50",
-        textColor: "text-green-700",
-        icon: <Gauge className="h-4 w-4 text-green-600" />,
+        description: "Kamu sangat dominan pada satu sisi. Gaya belajarmu jelas dan konsisten.",
+        color: "bg-green-200",
+        textColor: "text-green-800",
+        icon: <Gauge className="h-4 w-4 sm:h-5 sm:w-5 text-green-600" />,
+        scoreRange: "7-11",
     },
     Sedang: {
-        description: "Cukup menonjol dalam gaya belajar ini",
-        color: "bg-yellow-50",
-        textColor: "text-yellow-700",
-        icon: <Gauge className="h-4 w-4 text-yellow-600" />,
+        description: "Kamu punya kecenderungan ke satu sisi, tapi masih bisa beradaptasi.",
+        color: "bg-yellow-200",
+        textColor: "text-yellow-800",
+        icon: <Gauge className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-600" />,
+        scoreRange: "4-7",
     },
     Lemah: {
-        description: "Kurang dominan dalam gaya belajar ini",
-        color: "bg-red-50",
-        textColor: "text-red-700",
-        icon: <Gauge className="h-4 w-4 text-red-600" />,
+        description: "Kamu tidak memiliki preferensi yang jelas. Bisa fleksibel di kedua sisi dimensi.",
+        color: "bg-red-200",
+        textColor: "text-red-800",
+        icon: <Gauge className="h-4 w-4 sm:h-5 sm:w-5 text-red-600" />,
+        scoreRange: "4",
     },
 };
 
@@ -81,22 +82,22 @@ const INTENSITY_LEVELS = {
 const dimensionMaps = {
     pemrosesan: {
         icon: <BrainCog className="h-6 w-6" />,
-        color: "#0F67A6",
+        color: "#2563EB",
         title: "Pemrosesan",
     },
     persepsi: {
         icon: <BookOpen className="h-6 w-6" />,
-        color: "#0F67A6",
+        color: "#2563EB",
         title: "Persepsi",
     },
     input: {
         icon: <ArrowUpRight className="h-6 w-6" />,
-        color: "#0F67A6",
+        color: "#2563EB",
         title: "Input",
     },
     pemahaman: {
         icon: <CheckCircle2 className="h-6 w-6" />,
-        color: "#0F67A6",
+        color: "#2563EB",
         title: "Pemahaman",
     },
 };
@@ -111,6 +112,7 @@ export default function TestDetailPage({ params }: { params: Promise<{ testId: s
         isLoading,
         isError,
         error,
+        refetch,
     } = useQuery({
         queryKey: ["testDetail", testId],
         queryFn: async () => {
@@ -155,9 +157,14 @@ export default function TestDetailPage({ params }: { params: Promise<{ testId: s
         }
     }
 
-    // Gaya badge
-    const getBadgeStyle = () => {
-        return { bg: "#E6F0FA", text: "text-primary" };
+    // Gaya badge berdasarkan intensitas
+    const getBadgeStyle = (styleType: string) => {
+        return (
+            INTENSITY_LEVELS[styleType as keyof typeof INTENSITY_LEVELS] || {
+                color: "bg-gray-100",
+                textColor: "text-gray-800",
+            }
+        );
     };
 
     // Judul dimensi
@@ -170,10 +177,10 @@ export default function TestDetailPage({ params }: { params: Promise<{ testId: s
     if (isLoading) {
         return (
             <div className="flex items-center justify-center min-h-screen p-4">
-                <div className="text-center space-y-4">
-                    <Loader2 className="w-12 h-12 mx-auto animate-spin text-primary" />
-                    <p className="text-gray-600 text-lg font-medium">Memuat detail tes...</p>
-                </div>
+                <motion.div className="text-center space-y-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
+                    <Loader2 className="w-12 h-12 mx-auto animate-spin text-blue-600" />
+                    <p className="text-gray-600 text-lg font-medium font-inter">Memuat detail tes...</p>
+                </motion.div>
             </div>
         );
     }
@@ -181,13 +188,18 @@ export default function TestDetailPage({ params }: { params: Promise<{ testId: s
     // Error state
     if (isError || !test) {
         return (
-            <div className="max-w-7xl mx-auto px-4 py-12 pt-28 bg-white">
-                <div className="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 rounded-lg shadow-sm max-w-md w-full">
-                    {error instanceof Error ? error.message : "Data tes tidak ditemukan"}
-                    <Button variant="ghost" size="sm" onClick={() => router.back()} className="mt-2 w-full text-red-700 hover:bg-red-100 rounded-full text-sm" aria-label="Kembali ke halaman sebelumnya">
-                        <ChevronLeft className="mr-2 h-4 w-4" />
-                        Kembali
-                    </Button>
+            <div className="max-w-7xl mx-auto px-4 py-12 pt-28 ">
+                <div className="bg-red-50 border-l-4 border-red-500 text-red-700 p-6 rounded-lg shadow-sm max-w-md w-full">
+                    <p className="font-medium">{error instanceof Error ? error.message : "Data tes tidak ditemukan"}</p>
+                    <div className="mt-4 flex gap-4">
+                        <Button variant="ghost" size="sm" onClick={() => router.back()} className="w-full text-red-700 hover:bg-red-100 rounded-full text-sm font-inter" aria-label="Kembali ke halaman sebelumnya">
+                            <ChevronLeft className="mr-2 h-4 w-4" />
+                            Kembali
+                        </Button>
+                        <Button variant="ghost" size="sm" onClick={() => refetch()} className="w-full text-blue-700 hover:bg-blue-100 rounded-full text-sm font-inter" aria-label="Coba lagi memuat data">
+                            Coba Lagi
+                        </Button>
+                    </div>
                 </div>
             </div>
         );
@@ -195,7 +207,7 @@ export default function TestDetailPage({ params }: { params: Promise<{ testId: s
 
     return (
         <TooltipProvider>
-            <div className="max-w-7xl mx-auto min-h-screen space-y-8 py-4">
+            <div className="max-w-7xl mx-auto min-h-screen space-y-8 py-4 lg:px-8">
                 {/* Header Section */}
                 <Card className="bg-primary shadow-lg rounded-lg border-none">
                     <CardContent className="p-6">
@@ -218,30 +230,28 @@ export default function TestDetailPage({ params }: { params: Promise<{ testId: s
                     </CardContent>
                 </Card>
 
-                {/* Dimension Cards dengan ukuran tetap */}
-                <div className="grid grid-cols-1 gap-6 lg:grid-cols-4">
+                {/* Dimension Cards */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
                     {test.result.map((dimension, index) => {
-                        const badgeStyle = getBadgeStyle();
+                        const badgeStyle = getBadgeStyle(dimension.style_type);
                         const dimKey = dimension.dimension as keyof typeof dimensionMaps;
 
                         return (
-                            <motion.div key={dimension.dimension} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: index * 0.1 }} className="h-full">
-                                <Card className="bg-white shadow-lg rounded-lg border border-gray-200 h-80 flex flex-col justify-between">
-                                    <CardHeader className="pb-3 flex flex-row items-center justify-between border-b border-gray-200">
+                            <motion.div key={dimension.dimension} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: index * 0.1 }}>
+                                <Card className="bg-white shadow-lg rounded-xl border border-gray-200 flex flex-col">
+                                    <CardHeader className="pb-3 flex flex-row items-center justify-between border-b border-gray-200 px-6 pt-4">
                                         <div className="flex items-center gap-3">
-                                            <div className="p-2 bg-white rounded-lg">
+                                            <div className="p-2 bg-blue-50 rounded-lg">
                                                 <span style={{ color: dimensionMaps[dimKey]?.color }}>{dimensionMaps[dimKey]?.icon}</span>
                                             </div>
-                                            <CardTitle className="text-lg font-semibold text-primary">{getDimensionTitle(dimension.dimension)}</CardTitle>
+                                            <CardTitle className="text-lg font-semibold text-blue-900 font-inter">{getDimensionTitle(dimension.dimension)}</CardTitle>
                                         </div>
                                     </CardHeader>
-                                    <CardContent className="pt-4 flex-grow overflow-y-auto">
+                                    <CardContent className="pt-4 px-6 pb-6 flex-grow">
                                         <div className="flex items-center gap-3 mb-4">
                                             <Tooltip>
                                                 <TooltipTrigger>
-                                                    <Badge className="capitalize font-medium py-1 px-3 rounded-full" style={{ backgroundColor: badgeStyle.bg, color: badgeStyle.text }}>
-                                                        {dimension.style_type}
-                                                    </Badge>
+                                                    <div className={`capitalize font-medium py-1 px-3 rounded-full ${badgeStyle.color} ${badgeStyle.textColor} hover:bg-opacity-80 transition-colors`}>{dimension.style_type}</div>
                                                 </TooltipTrigger>
                                                 <TooltipContent>
                                                     <p>
@@ -249,9 +259,9 @@ export default function TestDetailPage({ params }: { params: Promise<{ testId: s
                                                     </p>
                                                 </TooltipContent>
                                             </Tooltip>
-                                            <div className="bg-gray-100 px-3 py-1 rounded-full text-sm font-medium text-gray-700">Skor: {dimension.score}</div>
+                                            <div className="bg-gray-100 px-3 py-1 rounded-full text-sm font-medium text-gray-700 font-inter">Skor: {dimension.score}</div>
                                         </div>
-                                        <p className="text-gray-600 text-sm">{test.penjelasan[dimension.dimension as keyof typeof test.penjelasan]}</p>
+                                        <p className="text-gray-600 text-sm font-inter">{test.penjelasan[dimension.dimension as keyof typeof test.penjelasan]}</p>
                                     </CardContent>
                                 </Card>
                             </motion.div>
@@ -260,68 +270,68 @@ export default function TestDetailPage({ params }: { params: Promise<{ testId: s
                 </div>
 
                 {/* Rekomendasi Belajar */}
-                <Card className="bg-white shadow-lg rounded-lg border border-gray-200">
-                    <CardHeader className="pb-3 border-b border-gray-200">
+                <Card className="bg-white shadow-lg rounded-xl border border-gray-200">
+                    <CardHeader className="pb-3 border-b border-gray-200 px-6 pt-4">
                         <div className="flex items-center gap-3">
-                            <BookOpen className="h-5 w-5 text-primary" />
-                            <CardTitle className="text-lg font-semibold text-primary">Rekomendasi Belajar</CardTitle>
+                            <BookOpen className="h-5 w-5 text-blue-600" />
+                            <CardTitle className="text-lg font-semibold text-blue-900 font-inter">Rekomendasi Belajar</CardTitle>
                         </div>
                     </CardHeader>
-                    <CardContent className="pt-4">
-                        <p className="text-gray-600 text-sm">{test.recommendations}</p>
+                    <CardContent className="pt-4 px-6 pb-6">
+                        <p className="text-gray-600 text-base font-inter">{test.recommendations}</p>
                     </CardContent>
                 </Card>
 
-                {/* Tingkat Intensitas */}
-                <Card className="bg-white shadow-lg rounded-lg border border-gray-200">
-                    <CardHeader className="pb-3 border-b border-gray-200">
-                        <CardTitle className="text-lg font-semibold text-primary">Tingkat Intensitas Gaya Belajar</CardTitle>
+                {/* Tingkat Intensitas Gaya Belajar */}
+                <Card className="bg-white shadow-xl rounded-xl border border-gray-200">
+                    <CardHeader className="px-4 sm:px-6 pt-4 sm:pt-6 pb-4 border-b border-gray-200">
+                        <CardTitle className="text-lg sm:text-xl font-bold text-blue-900 font-inter flex items-center">
+                            <Gauge className="h-5 w-5 sm:h-6 sm:w-6 mr-2 text-blue-600" />
+                            Tingkat Intensitas Gaya Belajar
+                        </CardTitle>
                     </CardHeader>
-                    <CardContent className="pt-4">
-                        <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-                            {Object.entries(INTENSITY_LEVELS).map(([level, data]) => (
-                                <motion.div
-                                    key={level}
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ duration: 0.3 }}
-                                    className="flex items-start gap-3 p-4 bg-white rounded-lg hover:bg-white transition-all duration-200"
-                                >
-                                    <div className={`w-5 h-5 rounded-full ${data.color} flex items-center justify-center mt-0.5`}>{data.icon}</div>
-                                    <div>
-                                        <div className="flex items-center gap-2 mb-1">
-                                            <span className={`text-sm font-semibold ${data.textColor}`}>{level}</span>
-                                            <span className={`text-xs px-2 py-0.5 rounded-full ${data.color} bg-opacity-20 ${data.textColor}`}>{level === "Kuat" ? "7-11" : level === "Sedang" ? "4-7" : "4"}</span>
-                                        </div>
-                                        <p className="text-sm text-gray-600">{data.description}</p>
-                                        <div className="mt-2 text-sm text-gray-600 bg-white p-2 rounded-lg">
-                                            {level === "Kuat" && (
-                                                <p>
-                                                    <span className="font-medium">Contoh:</span> Anda secara alami selalu mencari cara belajar yang sesuai dengan gaya ini
-                                                </p>
-                                            )}
-                                            {level === "Sedang" && (
-                                                <p>
-                                                    <span className="font-medium">Contoh:</span> Anda cukup nyaman dengan gaya ini tetapi masih fleksibel
-                                                </p>
-                                            )}
-                                            {level === "Lemah" && (
-                                                <p>
-                                                    <span className="font-medium">Contoh:</span> Anda jarang menggunakan gaya ini tanpa adaptasi khusus
-                                                </p>
-                                            )}
-                                        </div>
-                                    </div>
-                                </motion.div>
+                    <CardContent className="px-4 sm:px-6 pt-4 sm:pt-6 pb-6 sm:pb-8">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
+                            {Object.entries(INTENSITY_LEVELS).map(([level, data], index) => (
+                                <Tooltip key={level}>
+                                    <TooltipTrigger asChild>
+                                        <motion.div
+                                            initial={{ opacity: 0, y: 20 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ duration: 0.3, delay: index * 0.1 }}
+                                            className={`flex items-center gap-3 p-4 sm:p-6 rounded-lg bg-white border border-gray-100 hover:bg-gray-100 active:bg-gray-100 hover:shadow-md transform hover:scale-105 transition-all duration-200`}
+                                            role="region"
+                                            aria-label={`Tingkat intensitas ${level}: ${data.description}`}
+                                        >
+                                            <div className={`w-6 h-6 sm:w-8 sm:h-8 rounded-full ${data.color} flex items-center justify-center`}>{data.icon}</div>
+                                            <div className="flex-1">
+                                                <div className="flex items-center gap-2 mb-1 sm:mb-2">
+                                                    <span className={`text-sm sm:text-base font-bold ${data.textColor} font-inter`}>{level}</span>
+                                                    <span className={`text-xs sm:text-sm font-medium px-2 py-0.5 sm:py-1 rounded-full ${data.color} ${data.textColor} bg-opacity-30 font-inter`}>Skor: {data.scoreRange}</span>
+                                                </div>
+                                                <p className="text-sm sm:text-base text-gray-600 font-inter">{data.description}</p>
+                                            </div>
+                                        </motion.div>
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                        <p>
+                                            {data.description}: Skor {data.scoreRange}
+                                        </p>
+                                    </TooltipContent>
+                                </Tooltip>
                             ))}
                         </div>
                     </CardContent>
                 </Card>
 
                 {/* Footer */}
-                <div className="text-center text-gray-600 text-lg mt-8">
+                <div className="text-center text-gray-600 text-base sm:text-lg mt-8 font-inter">
                     <p className="mb-4">Gunakan hasil tes ini untuk mengoptimalkan strategi belajar Anda</p>
-                    <Button onClick={() => router.back()} className="bg-primary hover:bg-primary text-white font-medium rounded-full px-6 py-2" aria-label="Kembali ke halaman sebelumnya">
+                    <Button
+                        onClick={() => router.back()}
+                        className="bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-full px-6 py-2 transform hover:scale-105 transition-transform font-inter"
+                        aria-label="Kembali ke halaman sebelumnya"
+                    >
                         <ChevronLeft className="mr-2 h-4 w-4" />
                         Kembali
                     </Button>
