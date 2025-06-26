@@ -117,7 +117,7 @@ export default function ResultPage() {
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }} className="flex items-center justify-center min-h-screen p-4">
                 <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ duration: 0.3, ease: "easeOut" }} className="text-center space-y-4">
                     <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: "linear" }}>
-                        <Loader2 className="h-12 w-12 mx-auto text-blue-600" />
+                        <Loader2 className="h-12 w-12 mx-auto text-primary" />
                     </motion.div>
                     <motion.p initial={{ y: 10, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.3, delay: 0.2 }} className="text-gray-600 text-lg font-medium font-inter">
                         Memproses hasil tes Anda...
@@ -289,7 +289,7 @@ export default function ResultPage() {
                         <p className="mb-4">Gunakan hasil tes ini untuk mengoptimalkan strategi belajar Anda</p>
                         <Button
                             onClick={() => router.push("/student")}
-                            className="bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-full px-6 py-2 transform hover:scale-105 transition-transform font-inter"
+                            className="bg-primary hover:bg-blue-700 text-white font-medium rounded-full px-6 py-2 transform hover:scale-105 transition-transform font-inter"
                             aria-label="Kembali ke dashboard"
                         >
                             <ChevronLeft className="mr-2 h-4 w-4" />
