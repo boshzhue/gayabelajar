@@ -298,7 +298,7 @@ export default function TestPage() {
     }
 
     return (
-        <div className="min-h-screen flex flex-col items-center py-4 sm:py-6">
+        <div className="min-h-screen flex flex-col items-center ">
             <div className="w-full max-w-full sm:max-w-3xl md:max-w-4xl lg:max-w-5xl">
                 <div className="bg-white p-3 sm:p-4 rounded-xl shadow-md mb-4 sm:mb-6">
                     <h1 className="text-base sm:text-lg md:text-xl font-bold text-center text-primary">
