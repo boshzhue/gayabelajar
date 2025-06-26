@@ -587,7 +587,7 @@ export default function RegisterStudentPage() {
                                                 type="text"
                                                 value={formData.grade}
                                                 onChange={handleChange}
-                                                placeholder="Contoh: XII IPA 1"
+                                                placeholder="Contoh: 10 IPA 1"
                                                 className="pl-7 sm:pl-9 h-9 sm:h-10 w-full border-gray-200 focus:ring-2 focus:ring-primary focus:border-primary rounded-lg text-xs sm:text-sm bg-background uppercase placeholder:text-gray-400"
                                                 aria-label="Masukkan kelas"
                                             />
