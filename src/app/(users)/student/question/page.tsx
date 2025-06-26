@@ -302,7 +302,7 @@ export default function TestPage() {
     // Tampilan saat memuat soal
     if (isLoadingQuestions) {
         return (
-            <div className="min-h-screen bg-white flex items-center justify-center px-4">
+            <div className="min-h-screen flex items-center justify-center px-4">
                 <div className="text-center">
                     <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary mx-auto"></div>
                     <p className="mt-3 text-sm text-primary">Memuat soal...</p>
