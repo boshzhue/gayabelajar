@@ -80,7 +80,7 @@ export default function TestPage() {
     useEffect(() => {
         const fetchQuestions = async () => {
             try {
-                const response = await api.get<Question[]>("/soal");
+                const response = await api.get<Question[]>("/soal/");
                 setQuestions(response.data);
             } catch (error) {
                 console.error("Gagal mengambil soal:", error);
