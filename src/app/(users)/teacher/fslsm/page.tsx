@@ -73,7 +73,7 @@ function FSLSMArticle() {
                             </ul>
                         </div>
                         <div className="bg-green-50 p-4 rounded-lg border border-green-200">
-                            <h3 className="font-bold text-green-700 mb-2">Seimbang</h3>
+                            <h3 className="font-bold text-green-700 mb-2">Lemah</h3>
                             <p className="text-sm">Siswa tidak memiliki preferensi kuat dan mudah beradaptasi dengan berbagai gaya.</p>
                             <ul className="list-disc pl-5 mt-2 text-sm space-y-1">
                                 <li>Berikan berbagai aktivitas.</li>
