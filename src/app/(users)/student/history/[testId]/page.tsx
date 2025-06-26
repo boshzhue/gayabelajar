@@ -59,22 +59,19 @@ const INTENSITY_LEVELS = {
         description: "Kamu sangat dominan pada satu sisi. Gaya belajarmu jelas dan konsisten.",
         color: "bg-green-200",
         textColor: "text-green-800",
-        icon: <Gauge className="h-4 w-4 sm:h-5 sm:w-5 text-green-600" />,
         scoreRange: "7-11",
     },
     Sedang: {
         description: "Kamu punya kecenderungan ke satu sisi, tapi masih bisa beradaptasi.",
         color: "bg-yellow-200",
         textColor: "text-yellow-800",
-        icon: <Gauge className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-600" />,
         scoreRange: "4-7",
     },
     Lemah: {
         description: "Kamu tidak memiliki preferensi yang jelas. Bisa fleksibel di kedua sisi dimensi.",
         color: "bg-red-200",
         textColor: "text-red-800",
-        icon: <Gauge className="h-4 w-4 sm:h-5 sm:w-5 text-red-600" />,
-        scoreRange: "4",
+        scoreRange: "1-3",
     },
 };
 
@@ -82,22 +79,22 @@ const INTENSITY_LEVELS = {
 const dimensionMaps = {
     pemrosesan: {
         icon: <BrainCog className="h-6 w-6" />,
-        color: "#2563EB",
+        color: "#0F67A6",
         title: "Pemrosesan",
     },
     persepsi: {
         icon: <BookOpen className="h-6 w-6" />,
-        color: "#2563EB",
+        color: "#0F67A6",
         title: "Persepsi",
     },
     input: {
         icon: <ArrowUpRight className="h-6 w-6" />,
-        color: "#2563EB",
+        color: "#0F67A6",
         title: "Input",
     },
     pemahaman: {
         icon: <CheckCircle2 className="h-6 w-6" />,
-        color: "#2563EB",
+        color: "#0F67A6",
         title: "Pemahaman",
     },
 };
@@ -244,7 +241,7 @@ export default function TestDetailPage({ params }: { params: Promise<{ testId: s
                                             <div className="p-2 bg-blue-50 rounded-lg">
                                                 <span style={{ color: dimensionMaps[dimKey]?.color }}>{dimensionMaps[dimKey]?.icon}</span>
                                             </div>
-                                            <CardTitle className="text-lg font-semibold text-blue-900 font-inter">{getDimensionTitle(dimension.dimension)}</CardTitle>
+                                            <CardTitle className="text-lg font-semibold text-primary font-inter">{getDimensionTitle(dimension.dimension)}</CardTitle>
                                         </div>
                                     </CardHeader>
                                     <CardContent className="pt-4 px-6 pb-6 flex-grow">
@@ -274,7 +271,7 @@ export default function TestDetailPage({ params }: { params: Promise<{ testId: s
                     <CardHeader className="pb-3 border-b border-gray-200 px-6 pt-4">
                         <div className="flex items-center gap-3">
                             <BookOpen className="h-5 w-5 text-blue-600" />
-                            <CardTitle className="text-lg font-semibold text-blue-900 font-inter">Rekomendasi Belajar</CardTitle>
+                            <CardTitle className="text-lg font-semibold text-primary font-inter">Rekomendasi Belajar</CardTitle>
                         </div>
                     </CardHeader>
                     <CardContent className="pt-4 px-6 pb-6">
@@ -285,7 +282,7 @@ export default function TestDetailPage({ params }: { params: Promise<{ testId: s
                 {/* Tingkat Intensitas Gaya Belajar */}
                 <Card className="bg-white shadow-xl rounded-xl border border-gray-200">
                     <CardHeader className="px-4 sm:px-6 pt-4 sm:pt-6 pb-4 border-b border-gray-200">
-                        <CardTitle className="text-lg sm:text-xl font-bold text-blue-900 font-inter flex items-center">
+                        <CardTitle className="text-lg sm:text-xl font-bold text-primary font-inter flex items-center">
                             <Gauge className="h-5 w-5 sm:h-6 sm:w-6 mr-2 text-blue-600" />
                             Tingkat Intensitas Gaya Belajar
                         </CardTitle>
@@ -303,7 +300,6 @@ export default function TestDetailPage({ params }: { params: Promise<{ testId: s
                                             role="region"
                                             aria-label={`Tingkat intensitas ${level}: ${data.description}`}
                                         >
-                                            <div className={`w-6 h-6 sm:w-8 sm:h-8 rounded-full ${data.color} flex items-center justify-center`}>{data.icon}</div>
                                             <div className="flex-1">
                                                 <div className="flex items-center gap-2 mb-1 sm:mb-2">
                                                     <span className={`text-sm sm:text-base font-bold ${data.textColor} font-inter`}>{level}</span>
