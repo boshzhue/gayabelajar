@@ -89,7 +89,7 @@ export default function StudentDashboard() {
 
     const getLevelFromScore = (score: number): string => {
         if (score >= 80) return "Kuat";
-        if (score >= 50) return "Sedang";
+        if (score >= 40) return "Sedang";
         return "Lemah";
     };
 
