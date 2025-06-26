@@ -1,15 +1,14 @@
 "use client";
 
+import { useState, useEffect, useCallback, useMemo } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import api from "@/lib/axios";
-import axios from "axios";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
+import axios from "axios";
+import api from "@/lib/axios";
 
-// Definisi interface untuk struktur data
 interface Question {
     id: number;
     pertanyaan: string;
@@ -50,7 +49,6 @@ interface TestResult {
     }[];
 }
 
-// Konstanta untuk pengaturan aplikasi
 const QUESTIONS_PER_PAGE = 11;
 const TOTAL_QUESTIONS = 44;
 const STORAGE_KEY = "quiz_answers";
@@ -61,7 +59,6 @@ const PROCESSING_KEY = "quiz_processing";
 export default function TestPage() {
     const router = useRouter();
 
-    // State untuk mengelola data aplikasi
     const [questions, setQuestions] = useState<Question[]>([]);
     const [isLoadingQuestions, setIsLoadingQuestions] = useState(true);
     const [answers, setAnswers] = useState<number[]>(() => Array(TOTAL_QUESTIONS).fill(-1));
@@ -74,18 +71,16 @@ export default function TestPage() {
 
     const totalPages = Math.ceil(TOTAL_QUESTIONS / QUESTIONS_PER_PAGE);
 
-    // Memo untuk mengoptimalkan performa
     const currentQuestions = useMemo(() => {
         const start = currentPage * QUESTIONS_PER_PAGE;
         const end = start + QUESTIONS_PER_PAGE;
         return questions.slice(start, end);
     }, [currentPage, questions]);
 
-    // Mengambil soal dari API saat komponen dimuat
     useEffect(() => {
         const fetchQuestions = async () => {
             try {
-                const response = await api.get<Question[]>("/soal/");
+                const response = await api.get<Question[]>("/soal");
                 setQuestions(response.data);
             } catch (error) {
                 console.error("Gagal mengambil soal:", error);
@@ -109,7 +104,6 @@ export default function TestPage() {
         fetchQuestions();
     }, [router]);
 
-    // Memuat jawaban dan halaman tersimpan dari localStorage
     useEffect(() => {
         const savedAnswers = localStorage.getItem(STORAGE_KEY);
         if (savedAnswers) {
@@ -133,19 +127,16 @@ export default function TestPage() {
         }
     }, [totalPages]);
 
-    // Menyimpan jawaban dan halaman ke localStorage
     useEffect(() => {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(answers));
         localStorage.setItem(PAGE_STORAGE_KEY, currentPage.toString());
     }, [answers, currentPage]);
 
-    // Menghitung progres jawaban
     const progress = useMemo(() => {
         const answered = answers.filter((a) => a !== -1).length;
         return Math.floor((answered / TOTAL_QUESTIONS) * 100);
     }, [answers]);
 
-    // Menangani pemilihan jawaban
     const handleAnswer = useCallback(
         (questionIndex: number, answerIndex: number) => {
             setAnswers((prev) => {
@@ -159,7 +150,6 @@ export default function TestPage() {
         [currentPage]
     );
 
-    // Memvalidasi halaman saat ini
     const validateCurrentPage = useCallback(() => {
         const start = currentPage * QUESTIONS_PER_PAGE;
         const end = start + QUESTIONS_PER_PAGE;
@@ -176,7 +166,6 @@ export default function TestPage() {
         return true;
     }, [currentPage, answers]);
 
-    // Navigasi ke halaman tertentu
     const goToPage = useCallback(
         (page: number) => {
             if (page < 0 || page >= totalPages) return;
@@ -188,7 +177,6 @@ export default function TestPage() {
         [totalPages]
     );
 
-    // Menangani penyelesaian kuis
     const handleFinish = useCallback(async () => {
         setIsSubmitting(true);
         localStorage.setItem(PROCESSING_KEY, "true");
@@ -286,72 +274,71 @@ export default function TestPage() {
         }
     }, [answers, router]);
 
-    // Menggulir ke pertanyaan yang belum dijawab
     const scrollToUnanswered = useCallback((questionNumber: number) => {
         const element = document.getElementById(`question-${questionNumber}`);
         if (element) {
             element.scrollIntoView({ behavior: "smooth", block: "center" });
-            element.classList.add("ring-2", "ring-accent-orange", "animate-pulse");
+            element.classList.add("ring-2", "ring-orange-500", "animate-pulse");
             setTimeout(() => {
-                element.classList.remove("ring-2", "ring-accent-orange", "animate-pulse");
+                element.classList.remove("ring-2", "ring-orange-500", "animate-pulse");
             }, 2000);
         }
         setShowWarningModal(false);
     }, []);
 
-    // Tampilan saat memuat soal
     if (isLoadingQuestions) {
         return (
-            <div className="min-h-screen flex items-center justify-center px-4">
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center px-2 sm:px-4">
                 <div className="text-center">
-                    <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary mx-auto"></div>
-                    <p className="mt-3 text-sm text-primary">Memuat soal...</p>
+                    <div className="animate-spin rounded-full h-8 w-8 sm:h-10 sm:w-10 border-b-2 border-primary mx-auto"></div>
+                    <p className="mt-2 sm:mt-3 text-xs sm:text-sm text-primary">Memuat soal...</p>
                 </div>
             </div>
         );
     }
 
-    // Tampilan utama aplikasi kuis
     return (
-        <div className="min-h-screen flex flex-col items-center sm:px-4">
-            <div className="w-full max-w-full sm:max-w-7xl">
-                <div className="bg-white p-3 sm:p-6 rounded-lg shadow mb-4 sm:mb-6">
-                    <h1 className="text-lg sm:text-2xl font-bold text-center mb-0 sm:mb-4 text-primary">
+        <div className="min-h-screen flex flex-col items-center py-4 sm:py-6">
+            <div className="w-full max-w-full sm:max-w-3xl md:max-w-4xl lg:max-w-5xl">
+                <div className="bg-white p-3 sm:p-4 rounded-xl shadow-md mb-4 sm:mb-6">
+                    <h1 className="text-base sm:text-lg md:text-xl font-bold text-center text-primary">
                         Tes Gaya Belajar (Soal {currentPage * QUESTIONS_PER_PAGE + 1} - {Math.min((currentPage + 1) * QUESTIONS_PER_PAGE, TOTAL_QUESTIONS)})
                     </h1>
-                    {errorMessage && <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-lg text-sm">{errorMessage}</div>}
-                    <div className="flex items-center gap-3 sm:gap-4 mb-2">
-                        <Progress value={progress} className="h-2 flex-1" />
-                        <span className="text-xs sm:text-sm font-medium">{progress}% Terisi</span>
+                    {errorMessage && <div className="mt-2 sm:mt-3 p-2 sm:p-3 bg-red-50 text-red-700 rounded-lg text-xs sm:text-sm">{errorMessage}</div>}
+                    <div className="flex items-center gap-2 sm:gap-3 mt-2 sm:mt-3">
+                        <Progress value={progress} className="h-1.5 sm:h-2 flex-1 bg-gray-200 [&>div]:bg-primary" aria-label={`Progres tes: ${progress}%`} />
+                        <span className="text-xs sm:text-sm font-medium text-gray-700">{progress}% Terisi</span>
                     </div>
                 </div>
 
-                <div className="space-y-3 sm:space-y-4">
+                <div className="space-y-2 sm:space-y-3">
                     {currentQuestions.map((question, index) => {
                         const absoluteIndex = currentPage * QUESTIONS_PER_PAGE + index;
                         return (
-                            <div key={question.id} id={`question-${absoluteIndex + 1}`} className="bg-white p-3 sm:p-6 rounded-lg shadow-sm border border-gray-200">
-                                <h2 className="font-bold text-base sm:text-lg mb-3 sm:mb-4 text-primary">
+                            <div key={question.id} id={`question-${absoluteIndex + 1}`} className="bg-white p-3 sm:p-4 rounded-xl shadow-sm border border-gray-200">
+                                <h2 className="font-bold text-sm sm:text-base md:text-lg mb-2 sm:mb-3 text-primary">
                                     {absoluteIndex + 1}. {question.pertanyaan}
                                 </h2>
                                 <div className="space-y-2 sm:space-y-3">
                                     {[question.pilihan_a, question.pilihan_b].map((option, optIndex) => (
                                         <div
                                             key={optIndex}
-                                            className={`p-3 sm:p-4 border rounded-lg cursor-pointer transition-colors min-h-[44px] flex items-center ${
-                                                answers[absoluteIndex] === optIndex ? "border-primary bg-primary/10" : "border-gray-200 hover:bg-gray-50"
+                                            className={`p-2 sm:p-3 border rounded-lg cursor-pointer transition-all duration-200 active:scale-[0.98] ${
+                                                answers[absoluteIndex] === optIndex ? "border-primary bg-primary/20" : "border-gray-200 hover:bg-gray-50"
                                             }`}
                                             onClick={() => handleAnswer(index, optIndex)}
+                                            role="button"
+                                            aria-label={`Pilih jawaban ${optIndex === 0 ? "A" : "B"}: ${option}`}
                                         >
                                             <div className="flex items-center">
                                                 <span
-                                                    className={`inline-flex items-center justify-center w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3 rounded-full ${
+                                                    className={`flex-shrink-0 aspect-square inline-flex items-center justify-center w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3 rounded-full ${
                                                         answers[absoluteIndex] === optIndex ? "bg-primary text-white" : "bg-gray-200 text-gray-700"
                                                     }`}
                                                 >
                                                     {optIndex === 0 ? "A" : "B"}
                                                 </span>
-                                                <span className="text-xs sm:text-sm">{option}</span>
+                                                <span className="text-xs sm:text-sm md:text-base text-gray-700 max-w-[calc(100%-2.5rem)] sm:max-w-[calc(100%-3rem)] min-w-0 break-words">{option}</span>
                                             </div>
                                         </div>
                                     ))}
@@ -361,19 +348,14 @@ export default function TestPage() {
                     })}
                 </div>
 
-                <div className="flex flex-col sm:flex-row justify-between gap-3 sm:gap-4 mt-4 sm:mt-6 mb-6 sm:mb-8">
-                    <Button
-                        onClick={() => goToPage(currentPage - 1)}
-                        disabled={currentPage === 0}
-                        variant="outline"
-                        className="flex-1 sm:flex-none border-accent-orange text-accent-orange text-xs sm:text-sm hover:bg-accent-orange/10 min-h-[44px]"
-                    >
+                <div className="flex flex-row justify-between gap-2 mt-4 sm:mt-6 mb-6 sm:mb-8">
+                    <Button onClick={() => goToPage(currentPage - 1)} disabled={currentPage === 0} variant="outline" className="flex-1 border-orange-500 text-orange-500 text-xs sm:text-sm min-h-[36px] sm:min-h-[40px] rounded-full">
                         <ChevronLeft className="mr-1 h-4 w-4" />
                         Sebelumnya
                     </Button>
 
                     {currentPage === totalPages - 1 ? (
-                        <Button onClick={() => setShowConfirmModal(true)} disabled={isSubmitting} className="flex-1 sm:flex-none bg-primary hover:bg-primary/90 text-white text-xs sm:text-sm min-h-[44px]">
+                        <Button onClick={() => setShowConfirmModal(true)} disabled={isSubmitting} className="flex-1 bg-primary hover:bg-primary/90 text-white text-xs sm:text-sm min-h-[36px] sm:min-h-[40px] rounded-full">
                             {isSubmitting ? "Mengirim..." : "Selesai"}
                         </Button>
                     ) : (
@@ -381,7 +363,7 @@ export default function TestPage() {
                             onClick={() => {
                                 if (validateCurrentPage()) goToPage(currentPage + 1);
                             }}
-                            className="flex-1 sm:flex-none bg-primary hover:bg-primary/90 text-white text-xs sm:text-sm min-h-[44px]"
+                            className="flex-1 bg-primary hover:bg-primary/90 text-white text-xs sm:text-sm min-h-[36px] sm:min-h-[40px] rounded-full"
                         >
                             Berikutnya
                             <ChevronRight className="ml-1 h-4 w-4" />
@@ -392,20 +374,20 @@ export default function TestPage() {
 
             {/* Modal Peringatan */}
             {showWarningModal && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-white p-3 sm:p-6 rounded-lg max-w-[90%] sm:max-w-md w-full mx-4 shadow-xl">
-                        <h3 className="font-bold text-base sm:text-lg mb-3 sm:mb-4 text-accent-orange">Perhatian</h3>
-                        <p className="mb-3 sm:mb-4 text-xs sm:text-sm">Anda belum menjawab pertanyaan berikut:</p>
-                        <ul className="list-disc pl-4 sm:pl-5 mb-4 sm:mb-6 space-y-1 text-xs sm:text-sm">
+                <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 transition-all duration-200">
+                    <div className="bg-white p-3 sm:p-4 rounded-xl max-w-[85%] sm:max-w-sm w-full mx-2 sm:mx-4 shadow-xl">
+                        <h3 className="font-bold text-sm sm:text-base mb-2 sm:mb-3 text-orange-500">Perhatian</h3>
+                        <p className="mb-2 sm:mb-3 text-xs sm:text-sm text-gray-700">Anda belum menjawab pertanyaan berikut:</p>
+                        <ul className="list-disc pl-4 sm:pl-5 mb-3 sm:mb-4 space-y-1 text-xs sm:text-sm text-gray-700">
                             {unansweredQuestions.map((qIndex) => (
                                 <li key={qIndex}>Soal {qIndex}</li>
                             ))}
                         </ul>
-                        <div className="flex flex-col sm:flex-row justify-end gap-2">
-                            <Button variant="outline" onClick={() => setShowWarningModal(false)} className="text-xs sm:text-sm min-h-[44px]">
+                        <div className="flex flex-row justify-end gap-2">
+                            <Button variant="outline" onClick={() => setShowWarningModal(false)} className="text-xs sm:text-sm min-h-[36px] sm:min-h-[40px] rounded-full">
                                 Tutup
                             </Button>
-                            <Button onClick={() => scrollToUnanswered(unansweredQuestions[0])} className="bg-primary hover:bg-primary/90 text-white text-xs sm:text-sm min-h-[44px]">
+                            <Button onClick={() => scrollToUnanswered(unansweredQuestions[0])} className="bg-primary hover:bg-primary/90 text-white text-xs sm:text-sm min-h-[36px] sm:min-h-[40px] rounded-full">
                                 Lihat Soal
                             </Button>
                         </div>
@@ -415,12 +397,12 @@ export default function TestPage() {
 
             {/* Modal Konfirmasi */}
             {showConfirmModal && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-white p-3 sm:p-6 rounded-lg max-w-[90%] sm:max-w-md w-full mx-4 shadow-xl">
-                        <h3 className="font-bold text-base sm:text-lg mb-3 sm:mb-4 text-primary">Konfirmasi Penyelesaian</h3>
-                        <p className="mb-3 sm:mb-4 text-xs sm:text-sm">Apakah Anda yakin ingin menyelesaikan tes? Pastikan semua jawaban telah diisi.</p>
-                        <div className="flex flex-col sm:flex-row justify-end gap-2">
-                            <Button variant="outline" onClick={() => setShowConfirmModal(false)} className="text-xs sm:text-sm min-h-[44px]">
+                <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 transition-all duration-200">
+                    <div className="bg-white p-3 sm:p-4 rounded-xl max-w-[85%] sm:max-w-sm w-full mx-2 sm:mx-4 shadow-xl">
+                        <h3 className="font-bold text-sm sm:text-base mb-2 sm:mb-3 text-primary">Konfirmasi Penyelesaian</h3>
+                        <p className="mb-2 sm:mb-3 text-xs sm:text-sm text-gray-700">Apakah Anda yakin ingin menyelesaikan tes? Pastikan semua jawaban telah diisi.</p>
+                        <div className="flex flex-row justify-end gap-2">
+                            <Button variant="outline" onClick={() => setShowConfirmModal(false)} className="text-xs sm:text-sm min-h-[36px] sm:min-h-[40px] rounded-full">
                                 Batal
                             </Button>
                             <Button
@@ -428,7 +410,7 @@ export default function TestPage() {
                                     setShowConfirmModal(false);
                                     handleFinish();
                                 }}
-                                className="bg-primary hover:bg-primary/90 text-white text-xs sm:text-sm min-h-[44px]"
+                                className="bg-primary hover:bg-primary/90 text-white text-xs sm:text-sm min-h-[36px] sm:min-h-[40px] rounded-full"
                             >
                                 Selesai
                             </Button>
