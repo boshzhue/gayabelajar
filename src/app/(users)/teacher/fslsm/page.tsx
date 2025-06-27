@@ -23,14 +23,11 @@ function FSLSMArticle() {
                 <meta name="description" content="Panduan praktis FSLSM untuk membantu guru memahami dan mengakomodasi gaya belajar siswa dengan mudah." />
             </Head>
 
-            <div className="max-w-7xl mx-auto py-2">
+            <div className="max-w-7xl mx-auto sm:py-6">
                 {/* Header */}
-                <header className="mb-10 text-center bg-secondary text-white p-8 rounded-xl shadow-lg">
-                    <h1 className="text-2xl md:text-3xl font-bold mb-3 flex items-center justify-center gap-2">
-                        <BookOpen size={32} />
-                        Panduan Gaya Belajar FSLSM untuk Guru
-                    </h1>
-                    <p className="text-base md:text-lg opacity-90">Cara mudah memahami dan mendukung gaya belajar siswa di kelas</p>
+                <header className="mb-8 sm:mb-10 text-center bg-secondary text-white p-6 sm:p-8 rounded-xl shadow-lg">
+                    <h1 className="text-xl sm:text-2xl md:text-3xl font-bold mb-3 flex items-center justify-center gap-2">Panduan Gaya Belajar FSLSM untuk Guru</h1>
+                    <p className="text-sm sm:text-base md:text-lg opacity-90">Cara mudah memahami dan mendukung gaya belajar siswa di kelas</p>
                 </header>
 
                 {/* Pengantar */}
@@ -41,9 +38,9 @@ function FSLSMArticle() {
                     </h2>
                     <p className="mb-4 text-sm">
                         Felder-Silverman Learning Style Model (FSLSM) adalah alat untuk memahami cara siswa belajar. Setiap siswa memiliki preferensi gaya belajar yang bisa <strong>kuat</strong>, <strong>sedang</strong>, atau{" "}
-                        <strong>lemah</strong> dalam empat dimensi: Proses, Persepsi, Input, dan Pemahaman.
+                        <strong>seimbang</strong> dalam empat dimensi: Proses, Persepsi, Input, dan Pemahaman.
                     </p>
-                    <div className="bg-blue-50 p-4 rounded-lg border-blue-500">
+                    <div className="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500">
                         <h3 className="font-bold text-blue-700 mb-2">Mengapa Penting?</h3>
                         <p className="text-sm">Menyesuaikan pengajaran dengan gaya belajar siswa dapat meningkatkan keterlibatan dan hasil belajar. FSLSM membantu guru merancang aktivitas yang cocok untuk setiap siswa.</p>
                     </div>
@@ -273,6 +270,36 @@ function FSLSMArticle() {
                                 <li className="flex items-start gap-2">
                                     <ChevronRight className="text-blue-600 mt-1 flex-shrink-0" size={16} />
                                     <span>Berikan pilihan tugas (misalnya, presentasi atau laporan tertulis) untuk mendukung preferensi siswa.</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div className="bg-green-50 p-4 rounded-lg border-l-4 border-green-500">
+                            <h3 className="font-bold text-green-700 mb-2">Contoh Rencana Pelajaran</h3>
+                            <p className="text-sm mb-2">Pelajaran tentang "Siklus Air" untuk semua gaya belajar:</p>
+                            <ul className="space-y-2 text-sm">
+                                <li className="flex items-start gap-2">
+                                    <ChevronRight className="text-green-600 mt-1 flex-shrink-0" size={16} />
+                                    <span>
+                                        <strong>Aktif:</strong> Diskusi kelompok tentang dampak siklus air.
+                                    </span>
+                                </li>
+                                <li className="flex items-start gap-2">
+                                    <ChevronRight className="text-green-600 mt-1 flex-shrink-0" size={16} />
+                                    <span>
+                                        <strong>Visual:</strong> Gambar diagram siklus air dengan anotasi.
+                                    </span>
+                                </li>
+                                <li className="flex items-start gap-2">
+                                    <ChevronRight className="text-green-600 mt-1 flex-shrink-0" size={16} />
+                                    <span>
+                                        <strong>Sequensial:</strong> Langkah-langkah siklus air dalam urutan.
+                                    </span>
+                                </li>
+                                <li className="flex items-start gap-2">
+                                    <ChevronRight className="text-green-600 mt-1 flex-shrink-0" size={16} />
+                                    <span>
+                                        <strong>Intuitif:</strong> Proyek tentang perubahan iklim dan siklus air.
+                                    </span>
                                 </li>
                             </ul>
                         </div>
