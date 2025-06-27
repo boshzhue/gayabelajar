@@ -69,7 +69,7 @@ const ExportButton = ({ students }: { students: Student[] }) => {
     const CSVLink = dynamic(() => import("react-csv").then((mod) => mod.CSVLink), {
         ssr: false,
         loading: () => (
-            <Button disabled className="min-h-[44px] bg-gray-100 text-gray-400 rounded-full">
+            <Button disabled className="min-h-[36px] sm:min-h-[40px] bg-gray-100 text-gray-400 rounded-full text-xs sm:text-sm">
                 Menyiapkan ekspor...
             </Button>
         ),
@@ -77,7 +77,7 @@ const ExportButton = ({ students }: { students: Student[] }) => {
 
     return (
         <CSVLink data={csvData} filename={`data-siswa-${new Date().toISOString().slice(0, 10)}.csv`} className="inline-flex">
-            <Button variant="default" className="min-h-[44px] bg-secondary text-white hover:bg-blue-700 rounded-full transition-colors">
+            <Button variant="default" className="min-h-[36px] sm:min-h-[40px] bg-secondary text-white hover:bg-blue-700 rounded-full transition-all duration-200 active:scale-95 text-xs sm:text-sm">
                 Ekspor CSV
             </Button>
         </CSVLink>
@@ -180,58 +180,64 @@ export default function StudentTablePage() {
         <TooltipProvider>
             <div className="min-h-screen text-gray-800">
                 <div className="max-w-7xl mx-auto">
-                    <Card className="bg-secondary shadow-lg rounded-lg border-none mb-12">
-                        <CardContent className="p-6">
-                            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-                                <div className="space-y-3">
-                                    <h1 className="text-3xl font-bold text-white">Daftar Siswa & Gaya Belajar</h1>
-                                    <p className="text-white text-lg max-w-2xl">Tinjau hasil gaya belajar siswa untuk mendukung strategi pengajaran yang lebih efektif.</p>
+                    <Card className="bg-secondary shadow-md rounded-xl border-none mb-6 sm:mb-8">
+                        <CardContent className="p-3 sm:p-4">
+                            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 sm:gap-6">
+                                <div className="space-y-2 sm:space-y-3">
+                                    <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-white">Daftar Siswa & Gaya Belajar</h1>
+                                    <p className="text-sm sm:text-base text-white max-w-2xl">Tinjau hasil gaya belajar siswa untuk mendukung strategi pengajaran yang lebih efektif.</p>
                                 </div>
                             </div>
                         </CardContent>
                     </Card>
 
                     {error && (
-                        <div className="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 rounded-lg mb-6">
-                            <p>{error}</p>
-                            <Button variant="ghost" size="sm" onClick={() => fetchStudents()} className="mt-2 text-red-700 hover:bg-red-100" aria-label="Coba lagi memuat data">
+                        <div className="bg-red-50 border-l-4 border-red-500 text-red-700 p-3 sm:p-4 rounded-lg mb-6 sm:mb-8">
+                            <p className="text-sm sm:text-base">{error}</p>
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => fetchStudents()}
+                                className="mt-2 w-full text-red-700 hover:bg-red-100 rounded-full text-xs sm:text-sm min-h-[36px] sm:min-h-[40px] active:scale-95"
+                                aria-label="Coba lagi memuat data"
+                            >
                                 Coba Lagi
                             </Button>
                         </div>
                     )}
 
-                    <Card className="border-none bg-white shadow-lg">
-                        <CardHeader className="pb-6">
-                            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                                <CardTitle className="text-2xl font-bold text-secondary">Data Siswa</CardTitle>
-                                <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+                    <Card className="border-none bg-white shadow-md rounded-xl">
+                        <CardHeader className="pb-3 sm:pb-4">
+                            <div className="flex flex-col gap-3 sm:gap-4 sm:flex-row sm:items-center sm:justify-between">
+                                <CardTitle className="text-base sm:text-lg md:text-xl font-bold text-secondary">Data Siswa</CardTitle>
+                                <div className="flex flex-row flex-wrap gap-2 sm:gap-3">
                                     <ExportButton students={students} />
                                 </div>
                             </div>
                         </CardHeader>
 
                         <CardContent>
-                            <div className="relative mb-6 max-w-md">
-                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                            <div className="relative mb-4 sm:mb-6 max-w-md flex-1 min-w-[150px]">
+                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />
                                 <Input
                                     placeholder="Cari siswa (nama, kelas)"
                                     value={search}
                                     onChange={(e) => setSearch(e.target.value)}
-                                    className="pl-10 border-gray-300 focus:ring-blue-500 focus:border-blue-500 rounded-lg"
+                                    className="pl-10 border-gray-300 focus:ring-blue-500 focus:border-blue-500 rounded-lg text-xs sm:text-sm"
                                     aria-label="Cari siswa berdasarkan nama, kelas, atau sekolah"
                                 />
                             </div>
 
-                            <div className="overflow-x-auto">
-                                <Table>
-                                    <TableHeader className="bg-secondary">
+                            <div className="w-full max-w-full overflow-x-auto">
+                                <Table className="w-full">
+                                    <TableHeader className="bg-secondary sticky top-0 z-10">
                                         <TableRow>
-                                            <TableHead className="text-white text-center w-12 font-semibold">No</TableHead>
-                                            <TableHead className="text-white min-w-[150px] font-semibold">Nama</TableHead>
-                                            <TableHead className="text-white min-w-[100px] font-semibold">Kelas</TableHead>
-                                            <TableHead className="text-white min-w-[120px] font-semibold">Sekolah</TableHead>
+                                            <TableHead className="text-white text-center w-12 sm:w-16 font-semibold px-2 py-2 sm:py-3">No</TableHead>
+                                            <TableHead className="text-white w-[25%] sm:w-[20%] font-semibold px-2 py-2 sm:py-3">Nama</TableHead>
+                                            <TableHead className="text-white w-[20%] sm:w-[15%] font-semibold px-2 py-2 sm:py-3">Kelas</TableHead>
+                                            <TableHead className="text-white w-[25%] sm:w-[20%] font-semibold px-2 py-2 sm:py-3">Sekolah</TableHead>
                                             {DIMENSIONS.map((dim) => (
-                                                <TableHead key={dim.id} className="text-white text-center min-w-[120px] font-semibold">
+                                                <TableHead key={dim.id} className="text-white text-center font-semibold px-2 py-2 sm:py-3 min-w-[80px]">
                                                     {dim.label}
                                                 </TableHead>
                                             ))}
@@ -244,19 +250,25 @@ export default function StudentTablePage() {
                                                 .map((_, i) => (
                                                     <TableRow key={`skeleton-${i}`}>
                                                         <TableCell colSpan={7}>
-                                                            <Skeleton className="h-12 w-full rounded-lg" />
+                                                            <Skeleton className="h-10 sm:h-12 w-full rounded-lg" />
                                                         </TableCell>
                                                     </TableRow>
                                                 ))
                                         ) : paginatedStudents.length > 0 ? (
                                             paginatedStudents.map((student, index) => (
-                                                <TableRow key={student.nama_lengkap} className="hover:bg-blue-50/50 transition-colors">
-                                                    <TableCell className="text-center">{(currentPage - 1) * pageSize + index + 1}</TableCell>
-                                                    <TableCell className="font-medium text-gray-800 truncate max-w-[150px]">{student.nama_lengkap}</TableCell>
-                                                    <TableCell className="text-gray-600 truncate max-w-[100px]">{student.kelas || "-"}</TableCell>
-                                                    <TableCell className="text-gray-600 truncate max-w-[120px]">{student.sekolah}</TableCell>
+                                                <TableRow
+                                                    key={student.nama_lengkap}
+                                                    className="hover:bg-blue-50/50 transition-all duration-200"
+                                                    aria-label={`Data siswa: ${student.nama_lengkap}, kelas ${student.kelas || "-"}, sekolah ${student.sekolah}, Pemrosesan: ${student.kategori_pemrosesan || "-"}, Persepsi: ${
+                                                        student.kategori_persepsi || "-"
+                                                    }, Input: ${student.kategori_input || "-"}, Pemahaman: ${student.kategori_pemahaman || "-"}`}
+                                                >
+                                                    <TableCell className="text-center text-xs sm:text-sm px-2 py-2 sm:py-3">{(currentPage - 1) * pageSize + index + 1}</TableCell>
+                                                    <TableCell className="font-medium text-gray-800 text-xs sm:text-sm px-2 py-2 sm:py-3">{student.nama_lengkap}</TableCell>
+                                                    <TableCell className="text-gray-600 text-xs sm:text-sm px-2 py-2 sm:py-3">{student.kelas || "-"}</TableCell>
+                                                    <TableCell className="text-gray-600 text-xs sm:text-sm px-2 py-2 sm:py-3">{student.sekolah}</TableCell>
                                                     {DIMENSIONS.map((dim) => (
-                                                        <TableCell key={dim.id} className={`text-center px-2 py-1 rounded ${getColorClass(student[`kategori_${dim.id}` as keyof Student])}`}>
+                                                        <TableCell key={dim.id} className={`text-center px-2 py-2 sm:py-3 rounded text-xs sm:text-sm ${getColorClass(student[`kategori_${dim.id}` as keyof Student])}`}>
                                                             {student[`kategori_${dim.id}` as keyof Student] || "-"}
                                                         </TableCell>
                                                     ))}
@@ -264,7 +276,7 @@ export default function StudentTablePage() {
                                             ))
                                         ) : (
                                             <TableRow>
-                                                <TableCell colSpan={7} className="text-center py-8 text-gray-600 text-lg">
+                                                <TableCell colSpan={7} className="text-center py-6 sm:py-8 text-gray-600 text-sm">
                                                     {search ? "Tidak ada siswa yang cocok" : "Tidak ada data siswa"}
                                                 </TableCell>
                                             </TableRow>
@@ -274,8 +286,8 @@ export default function StudentTablePage() {
                             </div>
 
                             {totalItems > 0 && (
-                                <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-6">
-                                    <div className="flex items-center gap-2 text-lg text-gray-600">
+                                <div className="flex flex-row flex-wrap items-center justify-between gap-2 sm:gap-4 mt-4 sm:mt-6">
+                                    <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-600">
                                         <span>Baris per halaman:</span>
                                         <select
                                             value={pageSize.toString()}
@@ -283,7 +295,7 @@ export default function StudentTablePage() {
                                                 setPageSize(Number(e.target.value));
                                                 setCurrentPage(1);
                                             }}
-                                            className="w-20 border-gray-300 focus:ring-blue-500 focus:border-blue-500 rounded-lg p-2 bg-white text-gray-800 outline outline-1 outline-gray-400 outline-offset-0"
+                                            className="w-16 sm:w-20 border-gray-300 focus:ring-blue-500 focus:border-blue-500 rounded-lg p-2 bg-white text-gray-800 outline outline-1 outline-gray-400 outline-offset-0 text-xs sm:text-sm"
                                             aria-label="Pilih jumlah baris per halaman"
                                         >
                                             {PAGE_SIZE_OPTIONS.map((size) => (
@@ -294,21 +306,21 @@ export default function StudentTablePage() {
                                         </select>
                                     </div>
 
-                                    <div className="flex items-center gap-2">
+                                    <div className="flex items-center gap-1 sm:gap-2">
                                         <Button
                                             variant="outline"
                                             onClick={() => goToPage(currentPage - 1)}
                                             disabled={currentPage === 1}
-                                            className="h-10 w-10 p-0 border-gray-300 text-secondary hover:bg-blue-50 hover:text-blue-800 disabled:text-gray-400 disabled:bg-gray-50 rounded-full"
+                                            className="h-8 w-8 sm:h-10 sm:w-10 p-0 border-gray-300 text-secondary hover:bg-blue-50 hover:text-blue-800 disabled:text-gray-400 disabled:bg-gray-50 rounded-full active:scale-95"
                                             aria-label="Halaman sebelumnya"
                                         >
-                                            <ChevronLeft className="h-4 w-4" />
+                                            <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5" />
                                         </Button>
 
                                         <div className="flex gap-1">
                                             {getVisiblePages().map((page, i) =>
                                                 page === -1 ? (
-                                                    <Button key={`ellipsis-${i}`} variant="ghost" className="h-10 w-10 p-0 text-gray-400" disabled>
+                                                    <Button key={`ellipsis-${i}`} variant="ghost" className="h-8 w-8 sm:h-10 sm:w-10 p-0 text-gray-400" disabled>
                                                         ...
                                                     </Button>
                                                 ) : (
@@ -316,7 +328,9 @@ export default function StudentTablePage() {
                                                         key={page}
                                                         variant={currentPage === page ? "default" : "outline"}
                                                         onClick={() => goToPage(page)}
-                                                        className={`h-10 w-10 p-0 rounded-full ${currentPage === page ? "bg-secondary text-white hover:bg-blue-700" : "border-gray-300 text-secondary hover:bg-blue-50 hover:text-blue-800"}`}
+                                                        className={`h-8 w-8 sm:h-10 sm:w-10 p-0 rounded-full text-xs sm:text-sm ${
+                                                            currentPage === page ? "bg-secondary text-white hover:bg-blue-700" : "border-gray-300 text-secondary hover:bg-blue-50 hover:text-blue-800"
+                                                        } active:scale-95`}
                                                         aria-label={`Halaman ${page}`}
                                                     >
                                                         {page}
@@ -329,14 +343,14 @@ export default function StudentTablePage() {
                                             variant="outline"
                                             onClick={() => goToPage(currentPage + 1)}
                                             disabled={currentPage === totalPages}
-                                            className="h-10 w-10 p-0 border-gray-300 text-secondary hover:bg-blue-50 hover:text-blue-800 disabled:text-gray-400 disabled:bg-gray-50 rounded-full"
+                                            className="h-8 w-8 sm:h-10 sm:w-10 p-0 border-gray-300 text-secondary hover:bg-blue-50 hover:text-blue-800 disabled:text-gray-400 disabled:bg-gray-50 rounded-full active:scale-95"
                                             aria-label="Halaman berikutnya"
                                         >
-                                            <ChevronRight className="h-4 w-4" />
+                                            <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5" />
                                         </Button>
                                     </div>
 
-                                    <div className="text-lg text-gray-600">{`${(currentPage - 1) * pageSize + 1}-${Math.min(currentPage * pageSize, totalItems)} dari ${totalItems}`}</div>
+                                    <div className="text-xs sm:text-sm text-gray-600">{`${(currentPage - 1) * pageSize + 1}-${Math.min(currentPage * pageSize, totalItems)} dari ${totalItems}`}</div>
                                 </div>
                             )}
                         </CardContent>
