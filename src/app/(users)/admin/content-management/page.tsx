@@ -236,7 +236,7 @@ export default function ContentManagementPage() {
     };
 
     return (
-        <div className="min-h-screen text-foreground p-4 sm:p-6">
+        <div className="min-h-screen text-foreground">
             <Card className="bg-white shadow-sm">
                 <CardHeader>
                     <CardTitle className="text-xl sm:text-2xl">Manajemen Konten</CardTitle>
