@@ -229,7 +229,7 @@ export default function UserManagementClient() {
     }, [alert]);
 
     return (
-        <div className="min-h-screen text-foreground p-2 sm:p-4 md:p-6">
+        <div className="min-h-screen text-foreground">
             {alert && (
                 <Alert variant={alert.type === "success" ? "default" : "destructive"}>
                     <AlertTitle>{alert.type === "success" ? "Berhasil" : "Error"}</AlertTitle>
@@ -275,12 +275,11 @@ export default function UserManagementClient() {
                                         reset();
                                         setOpenFormDialog(true);
                                     }}
-                                    className="flex-1 min-w-[100px] text-white bg-purple-600 hover:bg-purple-700"
-                                    size="sm"
+                                    className="flex items-center justify-center gap-1 px-3 sm:px-4 py-2 sm:py-2.5 text-white bg-purple-600 hover:bg-purple-700 rounded-md transition-all"
                                     disabled={isLoading}
                                 >
-                                    <Plus className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
-                                    <span className="text-xs sm:text-sm">Tambah Admin</span>
+                                    <Plus className="h-4 w-4 sm:h-5 sm:w-5" />
+                                    <span className="text-xs sm:text-sm font-medium">Tambah Admin</span>
                                 </Button>
                             )}
                         </div>
@@ -346,7 +345,7 @@ export default function UserManagementClient() {
                                 <SelectTrigger className="w-[80px]">
                                     <SelectValue placeholder={rowsPerPage} />
                                 </SelectTrigger>
-                                <SelectContent>
+                                <SelectContent className="bg-white">
                                     {rowsPerPageOptions.map((size) => (
                                         <SelectItem key={size} value={size.toString()}>
                                             {size}
@@ -407,7 +406,7 @@ export default function UserManagementClient() {
                                 <SelectTrigger>
                                     <SelectValue placeholder="Pilih jenis kelamin" />
                                 </SelectTrigger>
-                                <SelectContent>
+                                <SelectContent className="bg-white">
                                     <SelectItem value="Laki-laki">Laki-laki</SelectItem>
                                     <SelectItem value="Perempuan">Perempuan</SelectItem>
                                 </SelectContent>
@@ -415,13 +414,13 @@ export default function UserManagementClient() {
                             {errors.gender && <p className="text-red-500">{errors.gender.message}</p>}
                         </div>
                         <input type="hidden" {...register("role")} value="admin" />
-                        <DialogFooter>
+                        <DialogFooter className="p-4 sm:p-6">
                             <DialogClose asChild>
                                 <Button type="button" variant="outline">
                                     Batal
                                 </Button>
                             </DialogClose>
-                            <Button type="submit" disabled={isLoading}>
+                            <Button type="submit" disabled={isLoading} className="bg-primary hover:bg-primary-800 text-white">
                                 {isLoading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
                                 Simpan
                             </Button>
