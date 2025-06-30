@@ -73,10 +73,10 @@ const getLevelColor = (kategori: string): string => {
     console.log("Kategori yang diproses:", kategori, "Normalized:", normalizedKategori);
 
     if (normalizedKategori.includes("kuat")) {
-        return "text-secondary bg-blue-50 hover:bg-blue-100";
+        return "text-green-700 bg-green-50 hover:bg-green-100";
     }
     if (normalizedKategori.includes("sedang")) {
-        return "text-green-700 bg-green-50 hover:bg-green-100";
+        return "text-yellow-700 bg-yellow-50 hover:bg-yellow-100";
     }
     if (normalizedKategori.includes("rendah")) {
         return "text-red-700 bg-red-50 hover:bg-red-100";
