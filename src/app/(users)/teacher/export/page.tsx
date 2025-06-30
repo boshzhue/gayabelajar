@@ -39,9 +39,9 @@ const getColorClass = (result: string): string => {
     const level = result.split(" ").pop()?.toLowerCase();
     switch (level) {
         case "kuat":
-            return "text-secondary bg-blue-50 hover:bg-blue-100";
-        case "sedang":
             return "text-green-700 bg-green-50 hover:bg-green-100";
+        case "sedang":
+            return "text-yellow-700 bg-yellow-50 hover:bg-yellow-100";
         case "rendah":
         case "lemah":
             return "text-red-700 bg-red-50 hover:bg-red-100";
