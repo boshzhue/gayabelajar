@@ -77,7 +77,7 @@ const ExportButton = ({ students }: { students: Student[] }) => {
 
     return (
         <CSVLink data={csvData} filename={`data-siswa-${new Date().toISOString().slice(0, 10)}.csv`} className="inline-flex">
-            <Button variant="default" className="min-h-[36px] sm:min-h-[40px] bg-secondary text-white hover:bg-blue-700 rounded-full transition-all duration-200 active:scale-95 text-xs sm:text-sm">
+            <Button variant="default" className="min-h-[36px] sm:min-h-[40px] bg-secondary text-white hover:bg-secondary-700 rounded-full transition-all duration-200 active:scale-95 text-xs sm:text-sm">
                 Ekspor CSV
             </Button>
         </CSVLink>
@@ -223,7 +223,7 @@ export default function StudentTablePage() {
                                     placeholder="Cari siswa (nama, kelas)"
                                     value={search}
                                     onChange={(e) => setSearch(e.target.value)}
-                                    className="pl-10 border-gray-300 focus:ring-blue-500 focus:border-blue-500 rounded-lg text-xs sm:text-sm"
+                                    className="pl-10 border-gray-300 focus:ring-secondary-500 focus:border-secondary-500 rounded-lg text-xs sm:text-sm"
                                     aria-label="Cari siswa berdasarkan nama, kelas, atau sekolah"
                                 />
                             </div>
@@ -258,7 +258,7 @@ export default function StudentTablePage() {
                                             paginatedStudents.map((student, index) => (
                                                 <TableRow
                                                     key={student.nama_lengkap}
-                                                    className="hover:bg-blue-50/50 transition-all duration-200"
+                                                    className="hover:bg-secondary-50/50 transition-all duration-200"
                                                     aria-label={`Data siswa: ${student.nama_lengkap}, kelas ${student.kelas || "-"}, sekolah ${student.sekolah}, Pemrosesan: ${student.kategori_pemrosesan || "-"}, Persepsi: ${
                                                         student.kategori_persepsi || "-"
                                                     }, Input: ${student.kategori_input || "-"}, Pemahaman: ${student.kategori_pemahaman || "-"}`}
@@ -295,7 +295,7 @@ export default function StudentTablePage() {
                                                 setPageSize(Number(e.target.value));
                                                 setCurrentPage(1);
                                             }}
-                                            className="w-16 sm:w-20 border-gray-300 focus:ring-blue-500 focus:border-blue-500 rounded-lg p-2 bg-white text-gray-800 outline outline-1 outline-gray-400 outline-offset-0 text-xs sm:text-sm"
+                                            className="w-16 sm:w-20 border-gray-300 focus:ring-secondary-500 focus:border-secondary-500 rounded-lg p-2 bg-white text-gray-800 outline outline-1 outline-gray-400 outline-offset-0 text-xs sm:text-sm"
                                             aria-label="Pilih jumlah baris per halaman"
                                         >
                                             {PAGE_SIZE_OPTIONS.map((size) => (
@@ -311,7 +311,7 @@ export default function StudentTablePage() {
                                             variant="outline"
                                             onClick={() => goToPage(currentPage - 1)}
                                             disabled={currentPage === 1}
-                                            className="h-8 w-8 sm:h-10 sm:w-10 p-0 border-gray-300 text-secondary hover:bg-blue-50 hover:text-blue-800 disabled:text-gray-400 disabled:bg-gray-50 rounded-full active:scale-95"
+                                            className="h-8 w-8 sm:h-10 sm:w-10 p-0 border-gray-300 text-secondary hover:bg-secondary-50 hover:text-secondary-800 disabled:text-gray-400 disabled:bg-gray-50 rounded-full active:scale-95"
                                             aria-label="Halaman sebelumnya"
                                         >
                                             <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5" />
@@ -329,7 +329,7 @@ export default function StudentTablePage() {
                                                         variant={currentPage === page ? "default" : "outline"}
                                                         onClick={() => goToPage(page)}
                                                         className={`h-8 w-8 sm:h-10 sm:w-10 p-0 rounded-full text-xs sm:text-sm ${
-                                                            currentPage === page ? "bg-secondary text-white hover:bg-blue-700" : "border-gray-300 text-secondary hover:bg-blue-50 hover:text-blue-800"
+                                                            currentPage === page ? "bg-secondary text-white hover:bg-secondary-700" : "border-gray-300 text-secondary hover:bg-secondary-50 hover:text-secondary-800"
                                                         } active:scale-95`}
                                                         aria-label={`Halaman ${page}`}
                                                     >
@@ -343,7 +343,7 @@ export default function StudentTablePage() {
                                             variant="outline"
                                             onClick={() => goToPage(currentPage + 1)}
                                             disabled={currentPage === totalPages}
-                                            className="h-8 w-8 sm:h-10 sm:w-10 p-0 border-gray-300 text-secondary hover:bg-blue-50 hover:text-blue-800 disabled:text-gray-400 disabled:bg-gray-50 rounded-full active:scale-95"
+                                            className="h-8 w-8 sm:h-10 sm:w-10 p-0 border-gray-300 text-secondary hover:bg-secondary-50 hover:text-secondary-800 disabled:text-gray-400 disabled:bg-gray-50 rounded-full active:scale-95"
                                             aria-label="Halaman berikutnya"
                                         >
                                             <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5" />
