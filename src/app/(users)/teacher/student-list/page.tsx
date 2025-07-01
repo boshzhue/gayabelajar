@@ -250,7 +250,7 @@ export default function StudentTablePage() {
                                                 setFilter((prev) => ({ ...prev, kategori: "" }));
                                             }}
                                             className={`whitespace-nowrap rounded-full px-3 py-2 min-h-[36px] sm:min-h-[40px] text-xs sm:text-sm ${
-                                                activeDimension === dimension ? "bg-secondary text-white hover:bg-blue-700" : "border-blue-200 text-secondary hover:bg-blue-50 hover:text-blue-800"
+                                                activeDimension === dimension ? "bg-secondary text-white hover:bg-secondary-700" : "border-secondary-200 text-secondary hover:bg-secondary-50 hover:text-secondary-800"
                                             } transition-all duration-200 active:scale-95`}
                                             aria-label={`Pilih dimensi ${DIMENSION_LABELS[dimension]}`}
                                         >
@@ -269,14 +269,14 @@ export default function StudentTablePage() {
                                         placeholder="Cari siswa (nama, kelas)..."
                                         value={filter.pencarian}
                                         onChange={(e) => handleFilterChange("pencarian", e.target.value)}
-                                        className="pl-10 border-gray-300 focus:ring-blue-500 focus:border-blue-500 rounded-lg text-xs sm:text-sm"
+                                        className="pl-10 border-gray-300 focus:ring-secondary-500 focus:border-secondary-500 rounded-lg text-xs sm:text-sm"
                                         aria-label="Cari siswa berdasarkan nama atau kelas"
                                     />
                                 </div>
                                 <select
                                     value={filter.kategori}
                                     onChange={(e) => handleFilterChange("kategori", e.target.value)}
-                                    className="min-w-[150px] flex-1 border-gray-300 focus:ring-blue-500 focus:border-blue-500 rounded-lg p-2 bg-white text-gray-800 outline outline-1 outline-gray-400 outline-offset-0 text-xs sm:text-sm"
+                                    className="min-w-[150px] flex-1 border-gray-300 focus:ring-secondary-500 focus:border-secondary-500 rounded-lg p-2 bg-white text-gray-800 outline outline-1 outline-gray-400 outline-offset-0 text-xs sm:text-sm"
                                     aria-label="Pilih kategori gaya belajar"
                                 >
                                     <option value="all" className="break-words">
@@ -321,7 +321,7 @@ export default function StudentTablePage() {
                                                 </TableRow>
                                             ) : (
                                                 paginatedStudents.map((siswa, index) => (
-                                                    <TableRow key={`${siswa.nama_lengkap}-${index}`} className="hover:bg-blue-50/50 transition-all duration-200">
+                                                    <TableRow key={`${siswa.nama_lengkap}-${index}`} className="hover:bg-secondary-50/50 transition-all duration-200">
                                                         <TableCell className="text-center text-xs sm:text-sm">{(currentPage - 1) * pageSize + index + 1}</TableCell>
                                                         <TableCell className="font-medium text-gray-800 text-xs sm:text-sm min-w-0 break-words">{siswa.nama_lengkap}</TableCell>
                                                         <TableCell className="text-gray-600 text-xs sm:text-sm min-w-0 break-words">{siswa.kelas}</TableCell>
@@ -347,7 +347,7 @@ export default function StudentTablePage() {
                                                 setPageSize(Number(e.target.value));
                                                 setCurrentPage(1);
                                             }}
-                                            className="w-16 sm:w-20 border-gray-300 focus:ring-blue-500 focus:border-blue-500 rounded-lg p-2 bg-white text-gray-800 outline outline-1 outline-gray-400 outline-offset-0 text-xs sm:text-sm"
+                                            className="w-16 sm:w-20 border-gray-300 focus:ring-secondary-500 focus:border-secondary-500 rounded-lg p-2 bg-white text-gray-800 outline outline-1 outline-gray-400 outline-offset-0 text-xs sm:text-sm"
                                             aria-label="Pilih jumlah baris per halaman"
                                         >
                                             {PAGE_SIZE_OPTIONS.map((size) => (
@@ -363,7 +363,7 @@ export default function StudentTablePage() {
                                             variant="outline"
                                             onClick={() => goToPage(currentPage - 1)}
                                             disabled={currentPage === 1}
-                                            className="h-8 w-8 sm:h-10 sm:w-10 p-0 border-gray-300 text-secondary hover:bg-blue-50 hover:text-blue-800 disabled:text-gray-400 disabled:bg-gray-50 rounded-full active:scale-95"
+                                            className="h-8 w-8 sm:h-10 sm:w-10 p-0 border-gray-300 text-secondary hover:bg-secondary-50 hover:text-secondary-800 disabled:text-gray-400 disabled:bg-gray-50 rounded-full active:scale-95"
                                             aria-label="Halaman sebelumnya"
                                         >
                                             <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5" />
@@ -381,7 +381,7 @@ export default function StudentTablePage() {
                                                         variant={currentPage === page ? "default" : "outline"}
                                                         onClick={() => goToPage(page)}
                                                         className={`h-8 w-8 sm:h-10 sm:w-10 p-0 rounded-full text-xs sm:text-sm ${
-                                                            currentPage === page ? "bg-secondary text-white hover:bg-blue-700" : "border-gray-300 text-secondary hover:bg-blue-50 hover:text-blue-800"
+                                                            currentPage === page ? "bg-secondary text-white hover:bg-secondary-700" : "border-gray-300 text-secondary hover:bg-secondary-50 hover:text-secondary-800"
                                                         } active:scale-95`}
                                                         aria-label={`Halaman ${page}`}
                                                     >
@@ -395,7 +395,7 @@ export default function StudentTablePage() {
                                             variant="outline"
                                             onClick={() => goToPage(currentPage + 1)}
                                             disabled={currentPage === totalPages}
-                                            className="h-8 w-8 sm:h-10 sm:w-10 p-0 border-gray-300 text-secondary hover:bg-blue-50 hover:text-blue-800 disabled:text-gray-400 disabled:bg-gray-50 rounded-full active:scale-95"
+                                            className="h-8 w-8 sm:h-10 sm:w-10 p-0 border-gray-300 text-secondary hover:bg-secondary-50 hover:text-secondary-800 disabled:text-gray-400 disabled:bg-gray-50 rounded-full active:scale-95"
                                             aria-label="Halaman berikutnya"
                                         >
                                             <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5" />
