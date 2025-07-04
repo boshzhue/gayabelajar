@@ -288,7 +288,7 @@ export default function TestPage() {
 
     if (isLoadingQuestions) {
         return (
-            <div className="min-h-screen bg-gray-50 flex items-center justify-center px-2 sm:px-4">
+            <div className="min-h-screen flex items-center justify-center px-2 sm:px-4">
                 <div className="text-center">
                     <div className="animate-spin rounded-full h-8 w-8 sm:h-10 sm:w-10 border-b-2 border-primary mx-auto"></div>
                     <p className="mt-2 sm:mt-3 text-xs sm:text-sm text-primary">Memuat soal...</p>
@@ -299,7 +299,7 @@ export default function TestPage() {
 
     return (
         <div className="min-h-screen flex flex-col items-center ">
-            <div className="w-full max-w-full sm:max-w-3xl md:max-w-4xl lg:max-w-5xl">
+            <div className="w-full max-w-full sm:max-w-3xl md:max-w-4xl lg:max-w-7xl">
                 <div className="bg-white p-3 sm:p-4 rounded-xl shadow-md mb-4 sm:mb-6">
                     <h1 className="text-base sm:text-lg md:text-xl font-bold text-center text-primary">
                         Tes Gaya Belajar (Soal {currentPage * QUESTIONS_PER_PAGE + 1} - {Math.min((currentPage + 1) * QUESTIONS_PER_PAGE, TOTAL_QUESTIONS)})
